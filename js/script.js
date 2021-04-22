@@ -2,7 +2,7 @@
 //-- Equipe: Vinícius Ribeiro, Moacir, Israel Oliveira, Alexsander Lins, Rafael Alexandre e Bruno Lacerda --
 
 //-- Variáveis --
-let primeiroValor, segundoValor, operacao, estado, display;
+let primeiroValor, segundoValor, operacao, estado, display, contadorOperacao;
 
 //constantes
 const ESTADOS = { PRIMEIRO_VALOR: "PRIMEIRO_VALOR", OPERACAO: "OPERACAO", SEGUNDO_VALOR: "SEGUNDO_VALOR" };
@@ -12,6 +12,7 @@ function inicializarEstado() {
     segundoValor = null;
     operacao = null;
     estado = ESTADOS.PRIMEIRO_VALOR;
+    contadorOperacao = 0;
 }
 //-- Função que inicializar a tela display da calculadora --
 function inicializarPagina() {
@@ -64,38 +65,41 @@ function btnClick(event) {
     }
     //-- Se o valor do botão apertado estiver no array de 'operacoesMatematicas' então a variável 'operacao' o receberá --
     const operacoesMatematicas = ['+', '-', '*', '/'];
-    if (operacoesMatematicas.includes(digito)) {
+    if (operacoesMatematicas.includes(digito) && contadorOperacao == 0) {
         operacao = digito;
         estado = ESTADOS.OPERACAO;
+        contadorOperacao++;
     }
 
     //-- Se clicar em '=' a operação será efetuada entre o 'primeiroValor' e 'segundoValor' --
-    if (digito == "=") {
-        let resultado;
+    if (digito == "=" && segundoValor != null) {
+            let resultado;
          //-- A variável 'resultado' receberá o valor retornado pela função de acordo com o caso --
-        switch (operacao) {           
-            case '+':
-                resultado = somar();
-                break;
-            case '-':
-                resultado = subtrair();
-                break;
-            case '*':
-                resultado = multiplicar();
-                break;
-            case '/':
-                resultado = dividir();
-                break;
-        }
-        //-- Se a operação tiver resultado ele será armazenado em 'primeiroValor', caso contrário os valores são resetados --
-        if (resultado) {
-            estado = ESTADOS.PRIMEIRO_VALOR;
-            primeiroValor = resultado;
-            segundoValor = null;
-            operacao = null;
-        } else {
-            inicializarEstado();
-        }
+            switch (operacao) {           
+                case '+':
+                    resultado = somar();
+                    break;
+                case '-':
+                    resultado = subtrair();
+                    break;
+                case '*':
+                    resultado = multiplicar();
+                    break;
+                case '/':
+                    resultado = dividir();
+                    break;
+            }
+        
+            //-- Se a operação tiver resultado ele será armazenado em 'primeiroValor', caso contrário os valores são resetados --
+            if (resultado) {
+                estado = ESTADOS.PRIMEIRO_VALOR;
+                primeiroValor = resultado;
+                segundoValor = null;
+                operacao = null;
+                contadorOperacao = 0;
+            } else {
+                inicializarEstado();
+            }
     }
     //-- Se o botão apertado for '<-' os campos serão apagados de acordo com o 'estado'
     if (digito == "<-") {
@@ -104,6 +108,7 @@ function btnClick(event) {
         } else if (estado == ESTADOS.OPERACAO) {
             operacao = "";
             estado = ESTADOS.PRIMEIRO_VALOR;
+            contadorOperacao = 0;
         }
         else if (estado == ESTADOS.SEGUNDO_VALOR) {
             segundoValor = segundoValor.slice(0, -1);
