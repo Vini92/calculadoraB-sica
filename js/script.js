@@ -4,7 +4,7 @@
 //-- Variáveis --
 let primeiroValor, segundoValor, operacao, estado, display, contadorOperacao;
 
-//constantes
+//-- Objeto para ajudar a definir a variável 'estado' --
 const ESTADOS = { PRIMEIRO_VALOR: "PRIMEIRO_VALOR", OPERACAO: "OPERACAO", SEGUNDO_VALOR: "SEGUNDO_VALOR" };
 //-- Função que inicializa os valores das variáveis --
 function inicializarEstado() {
